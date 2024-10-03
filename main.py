@@ -4,9 +4,9 @@ from dataclasses import dataclass, field
 
 root = tk.Tk()
 root.title("Maze Generator")
-width = 450
-height = 450
-padding = 20
+width = 1000
+height = 1000
+padding = 15
 
 canvas = tk.Canvas(root, width= width, height = height)
 canvas.pack()
@@ -16,11 +16,15 @@ canvas.pack()
 class Cell:
     x: int
     y: int
-    wall: list = field(default_factory = lambda: [True, True, True, True])
-    visited: bool = False
+   # wall: list = field(default_factory = lambda: [True, True, True, True])
+    top: bool
+    right: bool
+    bottom: bool
+    left: bool
+    visited: bool
 
-rowCellsCount = 20
-colCellsCount = 20
+rowCellsCount = 30
+colCellsCount = 30
 cellSize = 20
 
 grid: list[list[Cell]] = []
@@ -29,10 +33,16 @@ def renderCell(cell: Cell, cellSize: int, padding: int):
     xPos = padding + cell.x * cellSize
     yPos = padding + cell.y * cellSize
 
-    top = cell.wall[0]
-    right = cell.wall[1]
-    bottom = cell.wall[2]
-    left = cell.wall[3]
+    top = cell.top
+    right = cell.right
+    bottom = cell.bottom
+    left = cell.left
+
+    
+    if cell.visited:
+        canvas.create_rectangle(xPos, yPos, xPos + cellSize, yPos + cellSize, fill='#800020', outline='')
+        #canvas.create_rectangle(xPos, yPos, yPos + cellSize, yPos + cellSize, fill='#888888', outline='') #makes weird triangular-like rendering 
+
 
     if top: 
         canvas.create_line(xPos, yPos, xPos + cellSize, yPos, fill = "black")
@@ -43,16 +53,14 @@ def renderCell(cell: Cell, cellSize: int, padding: int):
     if left:
         canvas.create_line(xPos, yPos, xPos, yPos + cellSize, fill = "black")
 
-    if cell.visited:
-        canvas.create_rectangle(xPos, yPos, yPos + cellSize, yPos + cellSize, fill='#888888', outline='')
 
         
 
 
-for j in range(colCellsCount):
+for x in range(colCellsCount):
     row: list[Cell] = []
-    for i in range(rowCellsCount):
-        row.append(Cell(i, j))
+    for y in range(rowCellsCount):
+        row.append(Cell(x, y, True, True, True, True, False))
     grid.append(row)
 
 
@@ -63,18 +71,20 @@ def checkNeighbors(grid: list[list[Cell]], x: int,  y: int):
     unvisitedNeighbors = []
 
 
-    if y > 0 and not grid[y - 1][x].visited:  # Top
-        unvisitedNeighbors.append(grid[y - 1][x])
-    if x < colCellsCount - 1 and not grid[y][x + 1].visited:  # Right
-        unvisitedNeighbors.append(grid[y][x + 1])
-    if y < rowCellsCount - 1 and not grid[y + 1][x].visited:  # Bottom
-        unvisitedNeighbors.append(grid[y + 1][x])
-    if x > 0 and not grid[y][x - 1].visited:  # Left
-        unvisitedNeighbors.append(grid[y][x - 1])
+    if y > 0 and not grid[x][y - 1].visited:  # Top
+        unvisitedNeighbors.append(grid[x][y - 1])
+    if x < colCellsCount - 1 and not grid[x + 1][y].visited:  # Right
+        unvisitedNeighbors.append(grid[x + 1][y])
+    if y < rowCellsCount - 1 and not grid[x][y + 1].visited:  # Bottom
+        unvisitedNeighbors.append(grid[x][y + 1])
+    if x > 0 and not grid[x - 1][y].visited:  # Left
+        unvisitedNeighbors.append(grid[x - 1][y])
 
        
 
     return unvisitedNeighbors
+
+
     
 
 
@@ -86,8 +96,11 @@ while len(stack):
     current = stack[-1]
     current.visited = True
     stack.pop()
+    
+
 
     unvisitedNeighbors = checkNeighbors(grid, current.x, current.y)
+    
 
     if unvisitedNeighbors:
         stack.append(current)
@@ -107,11 +120,12 @@ while len(stack):
             current.top = False
             next_cell.bottom = False
         next_cell.visited = True
-
-
+ 
+    
 for row in grid:
     for cell in row:
         renderCell(cell, cellSize, padding)
+
 
 root.update()
 input()
