@@ -4,9 +4,9 @@ from dataclasses import dataclass, field
 
 root = tk.Tk()
 root.title("Maze Generator")
-width = 1000
-height = 1000
-padding = 15
+width = 400
+height = 400
+
 
 canvas = tk.Canvas(root, width= width, height = height)
 canvas.pack()
@@ -23,15 +23,16 @@ class Cell:
     left: bool
     visited: bool
 
-rowCellsCount = 30
-colCellsCount = 30
+
+rowCellsCount = 15
+colCellsCount = 15
 cellSize = 20
 
 grid: list[list[Cell]] = []
 
-def renderCell(cell: Cell, cellSize: int, padding: int):
-    xPos = padding + cell.x * cellSize
-    yPos = padding + cell.y * cellSize
+def renderCell(cell: Cell, cellSize: int):
+    xPos = cell.x * cellSize
+    yPos = cell.y * cellSize
 
     top = cell.top
     right = cell.right
@@ -120,12 +121,16 @@ while len(stack):
             current.top = False
             next_cell.bottom = False
         next_cell.visited = True
+    
+
  
     
-for row in grid:
-    for cell in row:
-        renderCell(cell, cellSize, padding)
+    for row in grid:
+        for cell in row:
+            renderCell(cell, cellSize)
 
 
-root.update()
+    root.update()
+
+
 input()
