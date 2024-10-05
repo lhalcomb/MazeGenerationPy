@@ -98,13 +98,15 @@ while len(stack):
     current.visited = True
     stack.pop()
     
-
+    xPos = current.x * cellSize
+    yPos = current.y * cellSize
 
     unvisitedNeighbors = checkNeighbors(grid, current.x, current.y)
-    
 
+    
     if unvisitedNeighbors:
         stack.append(current)
+       
         next_cell = random.choice(unvisitedNeighbors)
         stack.append(next_cell)
 
@@ -127,7 +129,10 @@ while len(stack):
     
     for row in grid:
         for cell in row:
+            if next_cell.visited:
+                canvas.create_rectangle(xPos, yPos, xPos + cellSize, yPos + cellSize, fill='#FFD700', outline='')
             renderCell(cell, cellSize)
+            
 
 
     root.update()

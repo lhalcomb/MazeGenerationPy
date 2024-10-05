@@ -7,7 +7,7 @@ import random
 
 pygame.init()
 
-width, height = 1000, 1000
+width, height = 400, 400
 
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Maze Generator in PyGame!!")
@@ -20,8 +20,8 @@ grid = []
 burgundy = (128, 0, 32)
 black = (0, 0, 0)
 
-rowCellsCount = 50
-columnCellsCount = 50
+rowCellsCount = 20
+columnCellsCount = 20
 cellSize = 20
 
 def renderCell(cell: Cell, cellSize: int):
@@ -92,17 +92,13 @@ def checkNeighbors(grid: list[list[Cell]], x: int,  y: int):
 
 
 def DFS_step(stack):
-   
-
     if len(stack):
         current = stack.pop()
         current.visited = True
-        
-        
 
-
+        pygame.draw.rect(window, (255, 215, 0, 3), (xPos, yPos, cellSize, cellSize))
+        
         unvisitedNeighbors = checkNeighbors(grid, current.x, current.y)
-        
 
         if unvisitedNeighbors:
             stack.append(current)
@@ -122,6 +118,7 @@ def DFS_step(stack):
                 current.walls[0] = False
                 next_cell.walls[2] = False
             next_cell.visited = True
+
 
 def BFS_step():
     
@@ -230,15 +227,16 @@ stack = [grid[0][0]]
 
 queue = Queue()
 current = grid[0][0]
-current.visited = True
+
 queue.put(current)
 
-    
 
 walls = genListofWalls(columnCellsCount, rowCellsCount)
 disjoint_set = DisjointSet(columnCellsCount * rowCellsCount)
 
 while running:
+    xPos = current.x * cellSize
+    yPos = current.y * cellSize 
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -250,13 +248,15 @@ while running:
 
     window.fill("gray")
 
-    DFS_step(stack)
+    #DFS_step(stack)
+    
     #BFS_step()
     #iterativeRandomized_Kruskals(disjoint_set, walls)
-    #iterativeRandomized_Kruskals_step(disjoint_set, walls)
+    iterativeRandomized_Kruskals_step(disjoint_set, walls)
     for row in grid:
         for cell in row:
             renderCell(cell, cellSize)
+               
 
     pygame.display.flip()
     clock.tick(60)
