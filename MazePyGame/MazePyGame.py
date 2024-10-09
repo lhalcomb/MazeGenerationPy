@@ -62,15 +62,13 @@ def genListofWalls(columnCellsCount, rowCellsCount):
             if y < rowCellsCount - 1: #Bottom Wall
                 walls.append(((x,y), (x, y + 1)))
     random.shuffle(walls) # randomize the order of the walls
-
     
     return walls
 
 
 def checkNeighbors(grid: list[list[Cell]], x: int,  y: int):
-    
-    unvisitedNeighbors = []
 
+    unvisitedNeighbors = []
 
     if y > 0 and not grid[x][y - 1].visited:  # Top
         unvisitedNeighbors.append(grid[x][y - 1])
@@ -81,28 +79,22 @@ def checkNeighbors(grid: list[list[Cell]], x: int,  y: int):
     if x > 0 and not grid[x - 1][y].visited:  # Left
         unvisitedNeighbors.append(grid[x - 1][y])
 
-       
-
     return unvisitedNeighbors
-
-
-    
-
-
-
 
 def DFS_step(stack):
     if len(stack):
         current = stack.pop()
         current.visited = True
 
-        pygame.draw.rect(window, (255, 215, 0, 3), (xPos, yPos, cellSize, cellSize))
+        #pygame.draw.rect(window, (255, 215, 0, 3), (xPos, yPos, cellSize, cellSize))
         
         unvisitedNeighbors = checkNeighbors(grid, current.x, current.y)
 
         if unvisitedNeighbors:
             stack.append(current)
             next_cell = random.choice(unvisitedNeighbors)
+            if current.visited:
+                pygame.draw.rect(window, (255, 215, 0, 3), (xPos, yPos, cellSize, cellSize))
             stack.append(next_cell)
 
             if current.x < next_cell.x:
@@ -200,11 +192,20 @@ def iterativeRandomized_Kruskals_step(disjoint_set, walls):
 
         index1 = y1 * columnCellsCount + x1 #index1 = 6 * 20 + 18 = 138
         index2 = y2 * columnCellsCount + x2 #index2 = 7 * 20 + 18 = 158
+        
+        """ 
+        #Debugging
 
+        joinedWalls = []
+        if disjoint_set.find(index1) == disjoint_set.find(index2):
+            print(f'Set at index one: {disjoint_set.find(index1)}, Set at index two: {disjoint_set.find(index2)}')
+            joinedWalls.append((cell1_pos, cell2_pos))
+            print(f'First Cell: {joinedWalls[0][0]}, Second Cell: {joinedWalls[0][1]}') """
+           
         # Check if the two cells are in different sets
-        if disjoint_set.find(index1) != disjoint_set.find(index2):
-            
+
             # If they are in different sets, remove the wall between them
+        if disjoint_set.find(index1) != disjoint_set.find(index2):
             if x1 < x2:  # Right wall
                 cell1.walls[1] = False
                 cell2.walls[3] = False
@@ -234,6 +235,7 @@ queue.put(current)
 walls = genListofWalls(columnCellsCount, rowCellsCount)
 disjoint_set = DisjointSet(columnCellsCount * rowCellsCount)
 
+
 while running:
     xPos = current.x * cellSize
     yPos = current.y * cellSize 
@@ -248,15 +250,16 @@ while running:
 
     window.fill("gray")
 
-    #DFS_step(stack)
+    DFS_step(stack)
     
     #BFS_step()
     #iterativeRandomized_Kruskals(disjoint_set, walls)
-    iterativeRandomized_Kruskals_step(disjoint_set, walls)
+    #iterativeRandomized_Kruskals_step(disjoint_set, walls)  
     for row in grid:
         for cell in row:
             renderCell(cell, cellSize)
-               
+
+   
 
     pygame.display.flip()
     clock.tick(60)

@@ -8,10 +8,14 @@
 class DisjointSet:
     def __init__(self, num_elements):
         self.parent = list(range(num_elements)) #tracks the "parent" of each element where initially each element is its own set
-        self.rank = [0] * num_elements #list is used to optimize the union operation 
-    
+        self.rank = [1] * num_elements #list is used to optimize the union operation 
+        print(self.rank)
+
     def find(self, x):
-        """Find the root of the set that x belongs to."""
+        """
+        Find the root of the set that x belongs to.
+        Literally just a linear search algo.
+        """
 
         if self.parent[x] != x:
             self.parent[x] = self.find(self.parent[x]) 
@@ -26,11 +30,11 @@ class DisjointSet:
         shorter tree under the root of the taller tree, minimizing the depth and 
         speeding up future operations.
         """
-        root_x = self.find(x)
-        root_y = self.find(y)
+        root_x = self.find(x) #find where x is
+        root_y = self.find(y) #find where y is
 
-        if root_x != root_y:
-            if self.rank[root_x] > self.rank[root_y]:
+        if root_x != root_y: #if x != y attach smaller tree to larger tree
+            if self.rank[root_x] > self.rank[root_y]:  #
                 self.parent[root_y] = root_x
             elif self.rank[root_x] < self.rank[root_y]:
                 self.parent[root_x] = root_y
@@ -38,7 +42,9 @@ class DisjointSet:
                 self.parent[root_y] = root_x
                 self.rank[root_x] += 1
 
-
+""" arr = [1,2,3]
+setD = DisjointSet(len(arr))
+print(setD.find(0)) """
 """
 
 Why This Data Structure Is Useful:
