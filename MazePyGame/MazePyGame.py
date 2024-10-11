@@ -110,7 +110,35 @@ def DFS_step(stack):
                 current.walls[0] = False
                 next_cell.walls[2] = False
             next_cell.visited = True
+def DFS_Generate(stack):
+    while len(stack):
+        current = stack.pop()
+        current.visited = True
 
+        #pygame.draw.rect(window, (255, 215, 0, 3), (xPos, yPos, cellSize, cellSize))
+        
+        unvisitedNeighbors = checkNeighbors(grid, current.x, current.y)
+
+        if unvisitedNeighbors:
+            stack.append(current)
+            next_cell = random.choice(unvisitedNeighbors)
+            if current.visited:
+                pygame.draw.rect(window, (255, 215, 0, 3), (xPos, yPos, cellSize, cellSize))
+            stack.append(next_cell)
+
+            if current.x < next_cell.x:
+                current.walls[1] = False
+                next_cell.walls[3] = False
+            if current.x  > next_cell.x:
+                current.walls[3] = False
+                next_cell.walls[1] = False
+            if current.y < next_cell.y:
+                current.walls[2] = False
+                next_cell.walls[0] = False
+            if current.y > next_cell.y:
+                current.walls[0] = False
+                next_cell.walls[2] = False
+            next_cell.visited = True
 
 def BFS_step():
     
@@ -223,6 +251,81 @@ def iterativeRandomized_Kruskals_step(disjoint_set, walls):
             disjoint_set.union(index1, index2) #joins the sets and returns to top
 
 
+def aStar(start: Cell, end: Cell):
+    start.heuristic = start.heuristicMan(end)
+    start.cost = 0
+    openPath = []
+    openPath.append(start)
+
+    current = start
+
+    while current != end:
+        for wallDirection, item in enumerate(((0, -1), (1, 0), (0, 1), (-1, 0))):
+            if not current.walls[wallDirection]:
+                nextCell = grid[current.x + item[0]][current.y + item[1]]
+
+                if nextCell.cost > current.cost + 1:
+                    nextCell.heuristic = nextCell.heuristicMan(end)
+                    nextCell.cost = current.cost + 1
+                    nextCell.parent = current
+
+                    if nextCell not in openPath:
+                        openPath.append(nextCell)
+
+        openPath.remove(current)
+        openPath.sort(key=lambda cell: cell.heuristic + cell.cost)
+        current = openPath[0]
+    
+    finalPath = [current]
+
+    while current.parent is not None:
+        current = current.parent
+        finalPath.insert(0, current)
+
+    return  finalPath
+
+def aStarStep(current: Cell, end: Cell, openPath: list):
+    
+   if current != end:
+        for wallDirection, item in enumerate(((0, -1), (1, 0), (0, 1), (-1, 0))):
+            print("bruh0")
+            if not current.walls[wallDirection]:
+                print('bruh1')
+                nextCell = grid[current.x + item[0]][current.y + item[1]]
+
+                if nextCell.cost > current.cost + 1:
+                    print("bruh2")
+                    nextCell.heuristic = nextCell.heuristicMan(end)
+                    nextCell.cost = current.cost + 1
+                    nextCell.parent = current
+
+                    if nextCell not in openPath:
+                        print('bruh3')
+                        openPath.append(nextCell)
+
+        openPath.remove(current)
+        openPath.sort(key=lambda cell: cell.heuristic + cell.cost)
+        pygame.draw.line(window, (0, 255, 255), (current.x * cellSize + cellSize//2, current.y * cellSize + cellSize//2), (current.parent.x * cellSize +  cellSize//2, current.parent.y * cellSize + cellSize//2), 2)
+
+        return openPath[0]
+
+        
+       
+#    else:
+#        finalPath = [current]
+
+#        while current.parent is not None:
+#             current = current.parent
+#             finalPath.append(current)
+
+#             pygame.draw.line(window, (0, 255, 0),
+
+
+       
+
+    
+
+
 generateGridofCells(columnCellsCount, rowCellsCount)
 stack = [grid[0][0]]
 
@@ -236,9 +339,23 @@ walls = genListofWalls(columnCellsCount, rowCellsCount)
 disjoint_set = DisjointSet(columnCellsCount * rowCellsCount)
 
 
+start = grid[0][0]
+end = grid[columnCellsCount - 1][rowCellsCount - 1]
+xPos = current.x * cellSize
+yPos = current.y * cellSize 
+
+#DFS_Generate(stack)
+iterativeRandomized_Kruskals(disjoint_set, walls)
+finalPath = aStar(start, end)
+
+#for stepping through a*
+openPath = []
+current = start
+start.heuristic = start.heuristicMan(end)
+start.cost = 0
+openPath.append(start)
+
 while running:
-    xPos = current.x * cellSize
-    yPos = current.y * cellSize 
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -250,8 +367,9 @@ while running:
 
     window.fill("gray")
 
-    DFS_step(stack)
-    
+
+    #DFS_step(stack)
+    #DFS_Generate(stack)
     #BFS_step()
     #iterativeRandomized_Kruskals(disjoint_set, walls)
     #iterativeRandomized_Kruskals_step(disjoint_set, walls)  
@@ -259,8 +377,11 @@ while running:
         for cell in row:
             renderCell(cell, cellSize)
 
-   
+    for cell in finalPath[1:]:
+        pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2)
 
+    #current = aStarStep(current, end, openPath)
+    
     pygame.display.flip()
     clock.tick(60)
 

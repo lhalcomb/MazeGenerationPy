@@ -9,7 +9,7 @@ class DisjointSet:
     def __init__(self, num_elements):
         self.parent = list(range(num_elements)) #tracks the "parent" of each element where initially each element is its own set
         self.rank = [1] * num_elements #list is used to optimize the union operation 
-        print(self.rank)
+        #print(self.rank)
 
     def find(self, x):
         """
