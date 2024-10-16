@@ -294,16 +294,19 @@ def aStarStep(current: Cell, end: Cell, openPath: list):
                     
                     if nextCell not in openPath:
                         openPath.append(nextCell)
-    
-        openPath.remove(nextCell)
+        if current in openPath:
+            openPath.remove(current)
 
         openPath.sort(key=lambda cell: cell.heuristic + cell.cost)
+
+        if openPath:
+            current = openPath[0]
         
+        if current.parent:
+            pygame.draw.line(window, (0, 255, 255), (current.x * cellSize + cellSize//2, current.y * cellSize + cellSize//2), 
+                     (current.parent.x * cellSize + cellSize//2, current.parent.y * cellSize + cellSize//2), 2)
 
-        pygame.draw.line(window, (0, 255, 255), (current.x * cellSize + cellSize//2, current.y * cellSize + cellSize//2), 
-                     (nextCell.parent.x * cellSize + cellSize//2, nextCell.parent.y * cellSize + cellSize//2), 2)
-
-   return openPath
+   return current, openPath
 
 
 
@@ -332,11 +335,7 @@ yPos = current.y * cellSize
 
 DFS_Generate(stack)
 #iterativeRandomized_Kruskals(disjoint_set, walls)
-<<<<<<< HEAD
 #finalPath = aStar(start, end)
-=======
-finalPath = aStar(start, end)
->>>>>>> 8b5a6adbb1e0af8992a6e080bf2cb8c78866b52e
 
 #for stepping through a*
 openPath = []
