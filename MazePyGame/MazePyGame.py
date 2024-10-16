@@ -247,7 +247,6 @@ def iterativeRandomized_Kruskals_step(disjoint_set, walls):
                 # Union the sets of the two cells
             disjoint_set.union(index1, index2) #joins the sets and returns to top
 
-
 def aStar(start: Cell, end: Cell):
     start.heuristic = start.heuristicMan(end)
     start.cost = 0
@@ -257,7 +256,7 @@ def aStar(start: Cell, end: Cell):
     current = start
 
     while current != end:
-        for wallDirection, item in enumerate(((0, -1), (1, 0), (0, 1), (-1, 0))):
+        for wallDirection, item in enumerate(((0, -1), (1, 0), (0, 1), (-1, 0))): #  wall[0] (0, -1), wall[1] (1, 0), wall[2] (0, 1), wall[3] (-1, 0)
             if not current.walls[wallDirection]:
                 nextCell = grid[current.x + item[0]][current.y + item[1]]
 
@@ -337,14 +336,15 @@ DFS_Generate(stack)
 #iterativeRandomized_Kruskals(disjoint_set, walls)
 #finalPath = aStar(start, end)
 
-#for stepping through a*
-openPath = []
-current = start
-start.heuristic = start.heuristicMan(end)
-start.cost = 0
-openPath.append(start)
+
 
 while running:
+    #for stepping through a*
+    openPath = []
+    current = start
+    start.heuristic = start.heuristicMan(end)
+    start.cost = 0
+    openPath.append(start)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -366,12 +366,15 @@ while running:
         for cell in row:
             renderCell(cell, cellSize)
 
-    # for cell in finalPath[1:]:
-    #     pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2)
-
     current1 = aStarStep(current, end, openPath)
-    if current1 != None:
-        for cell in current1:
+
+    """ for cell in finalPath[1:]:
+        pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2) """
+
+    
+
+    
+    for cell in current1:
             print(cell.x, cell.y)
     
     pygame.display.flip()
