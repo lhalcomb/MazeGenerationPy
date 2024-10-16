@@ -7,7 +7,7 @@ import random
 
 pygame.init()
 
-width, height = 400, 400
+width, height = 900, 900
 
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Maze Generator in PyGame!!")
@@ -20,9 +20,9 @@ grid = []
 burgundy = (128, 0, 32)
 black = (0, 0, 0)
 
-rowCellsCount = 20
-columnCellsCount = 20
-cellSize = 20
+rowCellsCount = 30
+columnCellsCount = 30
+cellSize = 30
 
 def renderCell(cell: Cell, cellSize: int):
     xPos = cell.x * cellSize
@@ -110,6 +110,7 @@ def DFS_step(stack):
                 current.walls[0] = False
                 next_cell.walls[2] = False
             next_cell.visited = True
+
 def DFS_Generate(stack):
     while len(stack):
         current = stack.pop()
@@ -171,16 +172,12 @@ def BFS_step():
                     queue.put(next_cell)
         
 
-        
-    
-
 def iterativeRandomized_Kruskals(disjoint_set, walls):
     
 
     while walls:
         (cell1_pos, cell2_pos) = walls.pop()
         
-
         x1, y1 = cell1_pos
         x2, y2 = cell2_pos
 
@@ -284,40 +281,29 @@ def aStar(start: Cell, end: Cell):
     return  finalPath
 
 def aStarStep(current: Cell, end: Cell, openPath: list):
-    
+   
    if current != end:
         for wallDirection, item in enumerate(((0, -1), (1, 0), (0, 1), (-1, 0))):
-            print("bruh0")
             if not current.walls[wallDirection]:
-                print('bruh1')
                 nextCell = grid[current.x + item[0]][current.y + item[1]]
-
                 if nextCell.cost > current.cost + 1:
-                    print("bruh2")
                     nextCell.heuristic = nextCell.heuristicMan(end)
                     nextCell.cost = current.cost + 1
                     nextCell.parent = current
-
+                    
                     if nextCell not in openPath:
-                        print('bruh3')
                         openPath.append(nextCell)
+    
+        openPath.remove(nextCell)
 
-        openPath.remove(current)
         openPath.sort(key=lambda cell: cell.heuristic + cell.cost)
-        pygame.draw.line(window, (0, 255, 255), (current.x * cellSize + cellSize//2, current.y * cellSize + cellSize//2), (current.parent.x * cellSize +  cellSize//2, current.parent.y * cellSize + cellSize//2), 2)
-
-        return openPath[0]
-
         
-       
-#    else:
-#        finalPath = [current]
 
-#        while current.parent is not None:
-#             current = current.parent
-#             finalPath.append(current)
+        pygame.draw.line(window, (0, 255, 255), (current.x * cellSize + cellSize//2, current.y * cellSize + cellSize//2), 
+                     (nextCell.parent.x * cellSize + cellSize//2, nextCell.parent.y * cellSize + cellSize//2), 2)
 
-#             pygame.draw.line(window, (0, 255, 0),
+   return openPath
+
 
 
        
@@ -345,7 +331,11 @@ yPos = current.y * cellSize
 
 DFS_Generate(stack)
 #iterativeRandomized_Kruskals(disjoint_set, walls)
+<<<<<<< HEAD
+#finalPath = aStar(start, end)
+=======
 finalPath = aStar(start, end)
+>>>>>>> 8b5a6adbb1e0af8992a6e080bf2cb8c78866b52e
 
 #for stepping through a*
 openPath = []
@@ -376,10 +366,13 @@ while running:
         for cell in row:
             renderCell(cell, cellSize)
 
-    for cell in finalPath[1:]:
-        pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2)
+    # for cell in finalPath[1:]:
+    #     pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2)
 
-    #current = aStarStep(current, end, openPath)
+    current1 = aStarStep(current, end, openPath)
+    if current1 != None:
+        for cell in current1:
+            print(cell.x, cell.y)
     
     pygame.display.flip()
     clock.tick(60)
