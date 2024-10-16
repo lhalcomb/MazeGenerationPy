@@ -344,8 +344,8 @@ end = grid[columnCellsCount - 1][rowCellsCount - 1]
 xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
-#DFS_Generate(stack)
-iterativeRandomized_Kruskals(disjoint_set, walls)
+DFS_Generate(stack)
+#iterativeRandomized_Kruskals(disjoint_set, walls)
 finalPath = aStar(start, end)
 
 #for stepping through a*
