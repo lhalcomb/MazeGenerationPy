@@ -250,7 +250,6 @@ def iterativeRandomized_Kruskals_step(disjoint_set, walls):
                 # Union the sets of the two cells
             disjoint_set.union(index1, index2) #joins the sets and returns to top
 
-
 def aStar(start: Cell, end: Cell):
     start.heuristic = start.heuristicMan(end)
     start.cost = 0
