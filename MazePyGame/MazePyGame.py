@@ -327,8 +327,7 @@ walls = genListofWalls(columnCellsCount, rowCellsCount)
 disjoint_set = DisjointSet(columnCellsCount * rowCellsCount)
 
 
-start = grid[0][0]
-end = grid[columnCellsCount - 1][rowCellsCount - 1]
+
 xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
@@ -340,6 +339,8 @@ DFS_Generate(stack)
 
 while running:
     #for stepping through a*
+    start = grid[0][0]
+    end = grid[columnCellsCount - 1][rowCellsCount - 1] 
     openPath = []
     current = start
     start.heuristic = start.heuristicMan(end)
@@ -366,16 +367,10 @@ while running:
         for cell in row:
             renderCell(cell, cellSize)
 
-    current1 = aStarStep(current, end, openPath)
+    current, openPath = aStarStep(current, end, openPath)
 
     """ for cell in finalPath[1:]:
         pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2) """
-
-    
-
-    
-    for cell in current1:
-            print(cell.x, cell.y)
     
     pygame.display.flip()
     clock.tick(60)
