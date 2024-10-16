@@ -335,17 +335,17 @@ DFS_Generate(stack)
 #iterativeRandomized_Kruskals(disjoint_set, walls)
 #finalPath = aStar(start, end)
 
-
+start = grid[0][0]
+end = grid[columnCellsCount - 1][rowCellsCount - 1] 
+openPath = []
+current = start
+start.heuristic = start.heuristicMan(end)
+start.cost = 0
+openPath.append(start)
 
 while running:
     #for stepping through a*
-    start = grid[0][0]
-    end = grid[columnCellsCount - 1][rowCellsCount - 1] 
-    openPath = []
-    current = start
-    start.heuristic = start.heuristicMan(end)
-    start.cost = 0
-    openPath.append(start)
+    
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
