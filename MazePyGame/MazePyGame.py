@@ -331,11 +331,7 @@ yPos = current.y * cellSize
 
 DFS_Generate(stack)
 #iterativeRandomized_Kruskals(disjoint_set, walls)
-<<<<<<< HEAD
-#finalPath = aStar(start, end)
-=======
 finalPath = aStar(start, end)
->>>>>>> 8b5a6adbb1e0af8992a6e080bf2cb8c78866b52e
 
 #for stepping through a*
 openPath = []
