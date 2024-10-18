@@ -304,6 +304,7 @@ def aStarStep(current: Cell, end: Cell, openPath: list):
         if current.parent:
             pygame.draw.line(window, (0, 255, 255), (current.x * cellSize + cellSize//2, current.y * cellSize + cellSize//2), 
                      (current.parent.x * cellSize + cellSize//2, current.parent.y * cellSize + cellSize//2), 2)
+                     
 
    return current, openPath
 
@@ -331,7 +332,7 @@ disjoint_set = DisjointSet(columnCellsCount * rowCellsCount)
 xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
-DFS_Generate(stack)
+#DFS_Generate(stack)
 #iterativeRandomized_Kruskals(disjoint_set, walls)
 
 
@@ -369,11 +370,11 @@ while running:
             renderCell(cell, cellSize)
 
     current, openPath = aStarStep(current, end, openPath)
-    """ if current  == end:
-        for cell in finalPath[1:]:
-            pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2) """
+    """ 
+    for cell in finalPath[1:]:
+        pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2) """
     
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(5)
 
 pygame.quit()
