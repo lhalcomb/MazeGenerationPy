@@ -333,7 +333,7 @@ xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
 #DFS_Generate(stack)
-#iterativeRandomized_Kruskals(disjoint_set, walls)
+iterativeRandomized_Kruskals(disjoint_set, walls)
 
 
 start = grid[0][0]
@@ -343,7 +343,7 @@ current = start
 start.heuristic = start.heuristicMan(end)
 start.cost = 0
 openPath.append(start)
-#finalPath = aStar(start, end)
+finalPath = aStar(start, end)
 
 while running:
     #for stepping through a*
@@ -369,12 +369,12 @@ while running:
         for cell in row:
             renderCell(cell, cellSize)
 
-    current, openPath = aStarStep(current, end, openPath)
-    """ 
+    #current, openPath = aStarStep(current, end, openPath)
+    
     for cell in finalPath[1:]:
-        pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2) """
+        pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2)
     
     pygame.display.flip()
-    clock.tick(5)
+    clock.tick(60)
 
 pygame.quit()
