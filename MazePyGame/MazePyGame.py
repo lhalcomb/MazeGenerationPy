@@ -281,9 +281,9 @@ def aStar(start: Cell, end: Cell):
     return  finalPath
 
 def aStarStep(current: Cell, end: Cell, openPath: list):
-   
-   if current != end:
+    if current != end:
         for wallDirection, item in enumerate(((0, -1), (1, 0), (0, 1), (-1, 0))):
+            #print(f'Neighboring Wall Direction: {wallDirection}, Wall Exists? {current.walls[wallDirection]} ')
             if not current.walls[wallDirection]:
                 nextCell = grid[current.x + item[0]][current.y + item[1]]
                 if nextCell.cost > current.cost + 1:
@@ -293,28 +293,44 @@ def aStarStep(current: Cell, end: Cell, openPath: list):
                     
                     if nextCell not in openPath:
                         openPath.append(nextCell)
+        
         if current in openPath:
             openPath.remove(current)
 
         openPath.sort(key=lambda cell: cell.heuristic + cell.cost)
 
         if openPath:
-            current = openPath[0]
+            nextCurrent = openPath[0]
+            
+            # Draw line segment from `current` to `nextCurrent`
+            x1, y1 = current.x * cellSize + cellSize // 2, current.y * cellSize + cellSize // 2
+            x2, y2 = nextCurrent.x * cellSize + cellSize // 2, nextCurrent.y * cellSize + cellSize // 2
+            pygame.draw.line(window, (0, 255, 255), (x1, y1), (x2, y2), 3)
+
+            # Update `current` to the next cell
+            current = nextCurrent
         
-        if current.parent:
-            pygame.draw.line(window, (0, 255, 255), (current.x * cellSize + cellSize//2, current.y * cellSize + cellSize//2), 
-                     (current.parent.x * cellSize + cellSize//2, current.parent.y * cellSize + cellSize//2), 2)
-                     
+        # Draw the entire path up to this point
+        pathCell = current
+        while pathCell.parent:
+            x1, y1 = pathCell.x * cellSize + cellSize // 2, pathCell.y * cellSize + cellSize // 2
+            x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
+            pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
+            pathCell = pathCell.parent
 
-   return current, openPath
+    return current, openPath
 
+def generateAStar(current: Cell, end: Cell):
 
+    if current == end:
+        pathCell = current
+        while pathCell.parent:
+            x1, y1 = pathCell.x * cellSize + cellSize // 2, pathCell.y * cellSize + cellSize // 2
+            x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
+            pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
+            pathCell = pathCell.parent
 
        
-
-    
-
-
 generateGridofCells(columnCellsCount, rowCellsCount)
 stack = [grid[0][0]]
 
@@ -343,12 +359,11 @@ current = start
 start.heuristic = start.heuristicMan(end)
 start.cost = 0
 openPath.append(start)
-finalPath = aStar(start, end)
+# finalPath = aStar(start, end)
 
 while running:
     #for stepping through a*
     
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -368,12 +383,14 @@ while running:
     for row in grid:
         for cell in row:
             renderCell(cell, cellSize)
-
-    #current, openPath = aStarStep(current, end, openPath)
     
-    for cell in finalPath[1:]:
-        pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2)
+    current, openPath = aStarStep(current, end, openPath)
+    generateAStar(current, end)
     
+    # for cell in finalPath[1:]:
+    #     pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2)
+    
+    pygame.display.update()
     pygame.display.flip()
     clock.tick(60)
 
