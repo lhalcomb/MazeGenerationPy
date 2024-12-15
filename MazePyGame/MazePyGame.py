@@ -111,6 +111,7 @@ def DFS_step(stack):
                 next_cell.walls[2] = False
             next_cell.visited = True
 
+
 def DFS_Generate(stack):
     while len(stack):
         current = stack.pop()
@@ -359,7 +360,7 @@ current = start
 start.heuristic = start.heuristicMan(end)
 start.cost = 0
 openPath.append(start)
-# finalPath = aStar(start, end)
+#finalPath = aStar(start, end)
 
 while running:
     #for stepping through a*
@@ -370,8 +371,7 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
                 running = False
-
-
+        
     window.fill("gray")
 
 
@@ -384,6 +384,7 @@ while running:
         for cell in row:
             renderCell(cell, cellSize)
     
+    
     current, openPath = aStarStep(current, end, openPath)
     generateAStar(current, end)
     
@@ -392,6 +393,6 @@ while running:
     
     pygame.display.update()
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(15)
 
 pygame.quit()
