@@ -350,17 +350,17 @@ disjoint_set = DisjointSet(columnCellsCount * rowCellsCount)
 xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
-DFS_Generate(stack)
-#iterativeRandomized_Kruskals(disjoint_set, walls)
+#DFS_Generate(stack)
+iterativeRandomized_Kruskals(disjoint_set, walls)
 
-# graph = Graph(grid)
+graph = Graph(grid)
 start = grid[0][0]
 end = grid[columnCellsCount - 1][rowCellsCount - 1] 
-openPath = []
-current = start
-start.heuristic = start.heuristicMan(end)
-start.cost = 0
-openPath.append(start)
+# openPath = []
+# current = start
+# start.heuristic = start.heuristicMan(end)
+# start.cost = 0
+# openPath.append(start)
 #finalPath = aStar(start, end)
 
 
@@ -388,24 +388,28 @@ while running:
             renderCell(cell, cellSize)
     
     
-    current, openPath = aStarStep(current, end, openPath)
-    generateAStar(current, end)
+    # current, openPath = aStarStep(current, end, openPath)
+    # generateAStar(current, end)
     
-    # openPath = graph.dijkstrasPath(start, end)
-    # for cell in openPath:
-    #     if cell.parent:
-    #         pygame.draw.line(
-    #         window, 
-    #         (255, 255, 0), 
-    #         (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
-    #         (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
-    #         2
-    #     )
+    openPath = graph.dijkstrasPath(start, end)
+    for cell in openPath:
+        if cell.parent:
+            pygame.draw.line(
+            window, 
+            (255, 255, 0), 
+            (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+            (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+            2
+        )
 
 
     
     # for cell in finalPath[1:]:
-    #     pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2)
+    #     pygame.draw.line(window, 
+                        # (255, 255, 0), 
+                        # (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), 
+                        # (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 
+                        # 2)
     
     pygame.display.update()
     pygame.display.flip()

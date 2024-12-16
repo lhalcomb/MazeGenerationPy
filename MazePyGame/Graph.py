@@ -21,12 +21,12 @@ class Graph:
         # Directions corresponding to walls: top, right, bottom, left
         for wallDirection, (dx, dy) in enumerate(((0, -1), (1, 0), (0, 1), (-1, 0))):
             # Check if the wall in this direction is open
+            # print(f'Neighboring Wall Direction: {wallDirection}, Wall Exists? {cell.walls[wallDirection]} ')
             if not cell.walls[wallDirection]:
                 nx, ny = x + dx, y + dy
                 # Ensure the neighbor is within bounds
-                if 0 <= ny < len(self.grid) and 0 <= nx < len(self.grid[0]):
-                    newCell = self.grid[ny][nx]
-                    neighbors.append(newCell)
+                newCell = self.grid[nx][ny]
+                neighbors.append(newCell)
     
         return neighbors
     
@@ -39,11 +39,7 @@ class Graph:
 
         while priority_queue:
             current_cost, current = heapq.heappop(priority_queue)
-
-            if current in visited:
-                continue
             visited.add(current)
-
             if current == end:
                 break
 
@@ -61,6 +57,7 @@ class Graph:
         while current:
             path.append(current)
             current = current.parent
+            
         return path[::-1]  # Return reversed path (from start to end)
 
 
