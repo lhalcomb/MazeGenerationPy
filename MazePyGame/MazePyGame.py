@@ -1,6 +1,7 @@
 from queue import Queue
 from Cell import Cell
 from DisJointSet import DisjointSet
+from Graph import Graph
 
 import pygame
 import random
@@ -331,7 +332,7 @@ def generateAStar(current: Cell, end: Cell):
             pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
             pathCell = pathCell.parent
 
-       
+        
 generateGridofCells(columnCellsCount, rowCellsCount)
 stack = [grid[0][0]]
 
@@ -349,10 +350,10 @@ disjoint_set = DisjointSet(columnCellsCount * rowCellsCount)
 xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
-#DFS_Generate(stack)
-iterativeRandomized_Kruskals(disjoint_set, walls)
+DFS_Generate(stack)
+#iterativeRandomized_Kruskals(disjoint_set, walls)
 
-
+# graph = Graph(grid)
 start = grid[0][0]
 end = grid[columnCellsCount - 1][rowCellsCount - 1] 
 openPath = []
@@ -361,6 +362,8 @@ start.heuristic = start.heuristicMan(end)
 start.cost = 0
 openPath.append(start)
 #finalPath = aStar(start, end)
+
+
 
 while running:
     #for stepping through a*
@@ -387,6 +390,19 @@ while running:
     
     current, openPath = aStarStep(current, end, openPath)
     generateAStar(current, end)
+    
+    # openPath = graph.dijkstrasPath(start, end)
+    # for cell in openPath:
+    #     if cell.parent:
+    #         pygame.draw.line(
+    #         window, 
+    #         (255, 255, 0), 
+    #         (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+    #         (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+    #         2
+    #     )
+
+
     
     # for cell in finalPath[1:]:
     #     pygame.draw.line(window, (255, 255, 0), (cell.x * cellSize + cellSize//2, cell.y * cellSize + cellSize//2), (cell.parent.x * cellSize +  cellSize//2, cell.parent.y * cellSize + cellSize//2), 2)

@@ -15,6 +15,10 @@ class Cell:
         self.cost = math.inf
         self.heuristic = 0.0
         self.parent = None
+    
+    def __lt__(self, other: Cell):
+        # Compare cells based on their cost
+        return self.cost < other.cost
 
     def heuristicMan(self, end: Cell):
     #heuristic function for manhattan distance
