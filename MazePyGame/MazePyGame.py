@@ -304,12 +304,6 @@ def aStarStep(current: Cell, end: Cell, openPath: list):
 
         if openPath:
             nextCurrent = openPath[0]
-            
-            # Draw line segment from `current` to `nextCurrent`
-            x1, y1 = current.x * cellSize + cellSize // 2, current.y * cellSize + cellSize // 2
-            x2, y2 = nextCurrent.x * cellSize + cellSize // 2, nextCurrent.y * cellSize + cellSize // 2
-            pygame.draw.line(window, (0, 255, 255), (x1, y1), (x2, y2), 3)
-
             # Update `current` to the next cell
             current = nextCurrent
         
@@ -357,18 +351,18 @@ DFS_Generate(stack)
 graph = Graph(grid)
 start = grid[0][0]
 end = grid[columnCellsCount - 1][rowCellsCount - 1] 
-# graph.initializeCosts()
-# priority_queue = []
-# heapq.heappush(priority_queue, (0, start))
-# start.cost = 0
-#openPath = []
-# current = start
+graph.initializeCosts()
+priority_queue = []
+heapq.heappush(priority_queue, (0, start))
+start.cost = 0
+# openPath = []
+current = start
 # start.heuristic = start.heuristicMan(end)
 # start.cost = 0
 # openPath.append(start)
-#finalPath = aStar(start, end)
+# finalPath = aStar(start, end)
 
-
+pathSearch = True #dijkstra's step logic
 
 while running:
     #for stepping through a*
@@ -396,19 +390,20 @@ while running:
     # current, openPath = aStarStep(current, end, openPath)
     # generateAStar(current, end)
     
-    openPath = graph.dijkstrasPath(start, end)
-    for cell in openPath:
-        if cell.parent:
-            pygame.draw.line(
-            window, 
-            (255, 255, 0), 
-            (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
-            (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
-            2
-        )
-
-    #current, priority_queue = graph.dijkstrasPathStep(start, end, priority_queue, cellSize, window)
-
+    # openPath = graph.dijkstrasPath(start, end)
+    # for cell in openPath:
+    #     if cell.parent:
+    #         pygame.draw.line(
+    #         window, 
+    #         (255, 255, 0), 
+    #         (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+    #         (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+    #         2
+    #     )
+    
+    priority_queue = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
+    print(priority_queue)
+    
 
     
     # for cell in finalPath[1:]:

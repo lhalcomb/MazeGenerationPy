@@ -67,36 +67,47 @@ class Graph:
         if priority_queue:
             current_cost, current = heapq.heappop(priority_queue)
             if current != end:
-                for neighbor in self.neighbors(current):
-                    # Assuming movement cost of 1 between adjacent cells
-                    new_cost = current.cost + 1
-                    if new_cost < neighbor.cost:
-                        neighbor.cost = new_cost
-                        neighbor.parent = current
-                        heapq.heappush(priority_queue, (neighbor.cost, neighbor))
+                # Draw the entire path up to this point
+                pathCell = current
+                while pathCell.parent:
+                    x1, y1 = pathCell.x * cellSize + cellSize // 2, pathCell.y * cellSize + cellSize // 2
+                    x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
+                    pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
+                    pathCell = pathCell.parent
 
-            # Backtrack to find the path
-            cellCost, nextCurrent = priority_queue[0]
-           
             
-            # Draw line segment from `current` to `nextCurrent`
-            x1, y1 = current.x * cellSize + cellSize // 2, current.y * cellSize + cellSize // 2
-            x2, y2 = nextCurrent.x * cellSize + cellSize // 2, nextCurrent.y * cellSize + cellSize // 2
-            pygame.draw.line(window, (0, 255, 255), (x1, y1), (x2, y2), 3)
 
-            # Update `current` to the next cell
-            current = nextCurrent
+                for neighbor in self.neighbors(current):
+                        # Assuming movement cost of 1 between adjacent cells
+                    if neighbor not in priority_queue:
+                        new_cost = current.cost + 1
+                        if new_cost < neighbor.cost:
+                            neighbor.cost = new_cost
+                            neighbor.parent = current
+                            heapq.heappush(priority_queue, (neighbor.cost, neighbor))
+
+                
+                # cellCost, nextCurrent = priority_queue[0]
+                
+                    
+            #     # Draw line segment from `current` to `nextCurrent`
+            # x1, y1 = current.x * cellSize + cellSize // 2, current.y * cellSize + cellSize // 2
+            # x2, y2 = nextCurrent.x * cellSize + cellSize // 2, nextCurrent.y * cellSize + cellSize // 2
+            # pygame.draw.line(window, (0, 255, 255), (x1, y1), (x2, y2), 3) 
+
+            """The code block above was the coolest flaw in code I have ever seen"""
+       
+            pathCell = current
+            while pathCell.parent:
+                x1, y1 = pathCell.x * cellSize + cellSize // 2, pathCell.y * cellSize + cellSize // 2
+                x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
+                pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
+                pathCell = pathCell.parent
+
+        return priority_queue
     
         
-        # Draw the entire path up to this point
-        pathCell = current
-        while pathCell.parent:
-            x1, y1 = pathCell.x * cellSize + cellSize // 2, pathCell.y * cellSize + cellSize // 2
-            x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
-            pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
-            pathCell = pathCell.parent
-
-        return current, priority_queue
+    
             
 
 
