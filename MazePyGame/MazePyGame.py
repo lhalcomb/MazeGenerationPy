@@ -5,6 +5,7 @@ from Graph import Graph
 
 import pygame
 import random
+import heapq
 
 pygame.init()
 
@@ -350,13 +351,17 @@ disjoint_set = DisjointSet(columnCellsCount * rowCellsCount)
 xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
-#DFS_Generate(stack)
-iterativeRandomized_Kruskals(disjoint_set, walls)
+DFS_Generate(stack)
+#iterativeRandomized_Kruskals(disjoint_set, walls)
 
 graph = Graph(grid)
 start = grid[0][0]
 end = grid[columnCellsCount - 1][rowCellsCount - 1] 
-# openPath = []
+# graph.initializeCosts()
+# priority_queue = []
+# heapq.heappush(priority_queue, (0, start))
+# start.cost = 0
+#openPath = []
 # current = start
 # start.heuristic = start.heuristicMan(end)
 # start.cost = 0
@@ -402,6 +407,8 @@ while running:
             2
         )
 
+    #current, priority_queue = graph.dijkstrasPathStep(start, end, priority_queue, cellSize, window)
+
 
     
     # for cell in finalPath[1:]:
@@ -413,6 +420,6 @@ while running:
     
     pygame.display.update()
     pygame.display.flip()
-    clock.tick(15)
+    clock.tick(30)
 
 pygame.quit()
