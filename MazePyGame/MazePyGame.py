@@ -327,6 +327,10 @@ def generateAStar(current: Cell, end: Cell):
             pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
             pathCell = pathCell.parent
 
+def generateDijkstras(priority_queue, finalPath: list):
+     if len(priority_queue) == 0:
+                for (parentCell, currentCell) in finalPath:
+                    pygame.draw.line(window, (0, 255, 0), (parentCell[0], parentCell[1]), (currentCell[0], currentCell[1]), 3)
         
 generateGridofCells(columnCellsCount, rowCellsCount)
 stack = [grid[0][0]]
@@ -401,8 +405,12 @@ while running:
     #         2
     #     )
     
-    priority_queue = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
-    print(priority_queue)
+    
+    priority_queue, finalPath = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
+    print(priority_queue, finalPath)
+    if len(priority_queue) == 0:
+                for (parentCell, currentCell) in finalPath:
+                    pygame.draw.line(window, (0, 255, 0), (parentCell[0], parentCell[1]), (currentCell[0], currentCell[1]), 3)
     
 
     
@@ -415,6 +423,6 @@ while running:
     
     pygame.display.update()
     pygame.display.flip()
-    clock.tick(30)
+    clock.tick(60)
 
 pygame.quit()
