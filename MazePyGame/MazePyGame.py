@@ -406,14 +406,11 @@ while running:
     #     )
     
     
-    priority_queue, finalPath = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
-    print(priority_queue, finalPath)
-    if len(priority_queue) == 0:
-                for (parentCell, currentCell) in finalPath:
-                    pygame.draw.line(window, (0, 255, 0), (parentCell[0], parentCell[1]), (currentCell[0], currentCell[1]), 3)
+    
+    graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
+        
     
 
-    
     # for cell in finalPath[1:]:
     #     pygame.draw.line(window, 
                         # (255, 255, 0), 
@@ -423,6 +420,6 @@ while running:
     
     pygame.display.update()
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(30)
 
 pygame.quit()

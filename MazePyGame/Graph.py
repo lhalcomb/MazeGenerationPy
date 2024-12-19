@@ -61,15 +61,23 @@ class Graph:
 
         return path[::-1]  # Return reversed path (from start to end)
 
-    def dijkstrasPathStep(self, start: Cell, end: Cell, priority_queue, cellSize: int, window):
+    def dijkstrasPathStep(self, current: Cell, end: Cell, priority_queue, cellSize: int, window):
         #this needs work, still going over. Doesn't stop when current == end. 
 
-        if not priority_queue:
-            return priority_queue
+        if priority_queue[0] != end:
             
-        
-        current_cost, current = heapq.heappop(priority_queue)
-        if current == end:
+            current_cost, current = heapq.heappop(priority_queue)
+            
+
+            for neighbor in self.neighbors(current):
+                if neighbor not in priority_queue:
+                    new_cost = current_cost + 1
+                    if new_cost < neighbor.cost:
+                        neighbor.cost = new_cost
+                        neighbor.parent = current
+                        heapq.heappush(priority_queue, (neighbor.cost, neighbor))
+            
+            
             # Draw the entire path up to this point
             pathCell = current
             while pathCell.parent:
@@ -78,38 +86,45 @@ class Graph:
                 pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
                 pathCell = pathCell.parent
             
+        printcurrent = ((current.x, current.y))
+        printend = (end.x, end.y)
+        print(current_cost, printcurrent)
+        print(printend)
+        if printcurrent == printend: 
+            print("THIS IS THE END!!!")
 
-        for neighbor in self.neighbors(current):
-            # Assuming movement cost of 1 between adjacent cells
-            if neighbor not in priority_queue:
-                new_cost = current.cost + 1
-                if new_cost < neighbor.cost:
-                    neighbor.cost = new_cost
-                    neighbor.parent = current
-                    heapq.heappush(priority_queue, (neighbor.cost, neighbor))
-
+    # def dijkstrasPathStep(self, start: Cell, end: Cell, priority_queue, cellSize: int, window):
+    #     if not priority_queue:
+    #         return priority_queue, []
+        
+    #     if priority_queue[0] == end:
+    #         # finalPath = []
+    #         pathCell = end
+        
+    #         while pathCell.parent:
+    #             x1, y1 = pathCell.x * cellSize + cellSize // 2, pathCell.y * cellSize + cellSize // 2
+    #             x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
+    #             # finalPath.append(((x1,y1), (x2, y2)))
+    #             pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
+    #             pathCell = pathCell.parent
+        
+    #         return priority_queue, []
+        
+    #     current_cost, current = heapq.heappop(priority_queue)
+        
+    #     for neighbor in self.neighbors(current):
+    #     # Assuming movement cost of 1 between adjacent cells
+    #         if neighbor not in priority_queue:
+    #             new_cost = current.cost + 1
+    #             if new_cost < neighbor.cost:
+    #                 neighbor.cost = new_cost
+    #                 neighbor.parent = current
+    #                 heapq.heappush(priority_queue, (neighbor.cost, neighbor))
+        
+    #     return priority_queue, []
                 
-                # cellCost, nextCurrent = priority_queue[0]
-                
-                    
-            #     # Draw line segment from `current` to `nextCurrent`
-            # x1, y1 = current.x * cellSize + cellSize // 2, current.y * cellSize + cellSize // 2
-            # x2, y2 = nextCurrent.x * cellSize + cellSize // 2, nextCurrent.y * cellSize + cellSize // 2
-            # pygame.draw.line(window, (0, 255, 255), (x1, y1), (x2, y2), 3) 
-
-            """The code block above was the coolest flaw in code I have ever seen"""
-            finalPath = []
-            pathCell = current
-            while pathCell.parent:
-                x1, y1 = pathCell.x * cellSize + cellSize // 2, pathCell.y * cellSize + cellSize // 2
-                x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
-                finalPath.append(((x1,y1), (x2, y2)))
-                pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
-                pathCell = pathCell.parent
-            
-           
-                    
-        return priority_queue, finalPath
+                        
+        
     
         
     
