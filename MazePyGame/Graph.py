@@ -64,7 +64,7 @@ class Graph:
     def dijkstrasPathStep(self, current: Cell, end: Cell, priority_queue, cellSize: int, window):
         #this needs work, still going over. Doesn't stop when current == end. 
 
-        if priority_queue[0] != end:
+        if priority_queue[0][1] != end:
             
             current_cost, current = heapq.heappop(priority_queue)
             
@@ -85,43 +85,16 @@ class Graph:
                 x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
                 pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
                 pathCell = pathCell.parent
-            
-        printcurrent = ((current.x, current.y))
-        printend = (end.x, end.y)
-        print(current_cost, printcurrent)
-        print(printend)
-        if printcurrent == printend: 
-            print("THIS IS THE END!!!")
+        
+        # Backtrack to find the path
+        path = []
+        current = end
+        while current:
+            path.append(current)
+            current = current.parent
 
-    # def dijkstrasPathStep(self, start: Cell, end: Cell, priority_queue, cellSize: int, window):
-    #     if not priority_queue:
-    #         return priority_queue, []
-        
-    #     if priority_queue[0] == end:
-    #         # finalPath = []
-    #         pathCell = end
-        
-    #         while pathCell.parent:
-    #             x1, y1 = pathCell.x * cellSize + cellSize // 2, pathCell.y * cellSize + cellSize // 2
-    #             x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
-    #             # finalPath.append(((x1,y1), (x2, y2)))
-    #             pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
-    #             pathCell = pathCell.parent
-        
-    #         return priority_queue, []
-        
-    #     current_cost, current = heapq.heappop(priority_queue)
-        
-    #     for neighbor in self.neighbors(current):
-    #     # Assuming movement cost of 1 between adjacent cells
-    #         if neighbor not in priority_queue:
-    #             new_cost = current.cost + 1
-    #             if new_cost < neighbor.cost:
-    #                 neighbor.cost = new_cost
-    #                 neighbor.parent = current
-    #                 heapq.heappush(priority_queue, (neighbor.cost, neighbor))
-        
-    #     return priority_queue, []
+        return path[::-1]
+            
                 
                         
         

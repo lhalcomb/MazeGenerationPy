@@ -232,7 +232,7 @@ def iterativeRandomized_Kruskals_step(disjoint_set, walls):
            
         # Check if the two cells are in different sets
 
-            # If they are in different sets, remove the wall between them
+        # If they are in different sets, remove the wall between them
         if disjoint_set.find(index1) != disjoint_set.find(index2):
             if x1 < x2:  # Right wall
                 cell1.walls[1] = False
@@ -249,6 +249,8 @@ def iterativeRandomized_Kruskals_step(disjoint_set, walls):
 
                 # Union the sets of the two cells
             disjoint_set.union(index1, index2) #joins the sets and returns to top
+
+    return walls
 
 def aStar(start: Cell, end: Cell):
     start.heuristic = start.heuristicMan(end)
@@ -349,7 +351,7 @@ disjoint_set = DisjointSet(columnCellsCount * rowCellsCount)
 xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
-DFS_Generate(stack)
+#DFS_Generate(stack)
 #iterativeRandomized_Kruskals(disjoint_set, walls)
 
 graph = Graph(grid)
@@ -365,8 +367,6 @@ current = start
 # start.cost = 0
 # openPath.append(start)
 # finalPath = aStar(start, end)
-
-pathSearch = True #dijkstra's step logic
 
 while running:
     #for stepping through a*
@@ -385,7 +385,7 @@ while running:
     #DFS_Generate(stack)
     #BFS_step()
     #iterativeRandomized_Kruskals(disjoint_set, walls)
-    #iterativeRandomized_Kruskals_step(disjoint_set, walls)  
+    walls = iterativeRandomized_Kruskals_step(disjoint_set, walls)  
     for row in grid:
         for cell in row:
             renderCell(cell, cellSize)
@@ -395,19 +395,20 @@ while running:
     # generateAStar(current, end)
     
     # openPath = graph.dijkstrasPath(start, end)
-    # for cell in openPath:
-    #     if cell.parent:
-    #         pygame.draw.line(
-    #         window, 
-    #         (255, 255, 0), 
-    #         (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
-    #         (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
-    #         2
-    #     )
+
+    if (len(walls) == 0):
+        openPath = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
+        for cell in openPath:
+            if cell.parent:
+                pygame.draw.line(
+                window, 
+                (0, 255, 0), 
+                (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+                (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+                3
+            )
     
     
-    
-    graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
         
     
 
@@ -420,6 +421,6 @@ while running:
     
     pygame.display.update()
     pygame.display.flip()
-    clock.tick(30)
+    clock.tick(240)
 
 pygame.quit()
