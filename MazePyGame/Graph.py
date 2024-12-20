@@ -45,14 +45,13 @@ class Graph:
                 break
 
             for neighbor in self.neighbors(current):
-                # Assuming movement cost of 1 between adjacent cells
                 new_cost = current.cost + 1
                 if new_cost < neighbor.cost:
                     neighbor.cost = new_cost
                     neighbor.parent = current
                     heapq.heappush(priority_queue, (neighbor.cost, neighbor))
 
-        # Backtrack to find the path
+    
         path = []
         current = end
         while current:
@@ -68,7 +67,6 @@ class Graph:
             
             current_cost, current = heapq.heappop(priority_queue)
             
-
             for neighbor in self.neighbors(current):
                 if neighbor not in priority_queue:
                     new_cost = current_cost + 1

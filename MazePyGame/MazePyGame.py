@@ -114,6 +114,10 @@ def DFS_step(stack):
             next_cell.visited = True
 
 
+
+    return stack
+
+
 def DFS_Generate(stack):
     while len(stack):
         current = stack.pop()
@@ -357,15 +361,15 @@ yPos = current.y * cellSize
 graph = Graph(grid)
 start = grid[0][0]
 end = grid[columnCellsCount - 1][rowCellsCount - 1] 
-graph.initializeCosts()
-priority_queue = []
-heapq.heappush(priority_queue, (0, start))
-start.cost = 0
-# openPath = []
-current = start
-# start.heuristic = start.heuristicMan(end)
+# graph.initializeCosts()
+# priority_queue = []
+# heapq.heappush(priority_queue, (0, start))
 # start.cost = 0
-# openPath.append(start)
+openPath = []
+current = start
+start.heuristic = start.heuristicMan(end)
+start.cost = 0
+openPath.append(start)
 # finalPath = aStar(start, end)
 
 while running:
@@ -390,27 +394,43 @@ while running:
         for cell in row:
             renderCell(cell, cellSize)
     
-    
-    # current, openPath = aStarStep(current, end, openPath)
-    # generateAStar(current, end)
-    
-    # openPath = graph.dijkstrasPath(start, end)
+    # if (len(stack) == 0): 
+    #     current, openPath = aStarStep(current, end, openPath)
+    #     generateAStar(current, end)
+
 
     if (len(walls) == 0):
-        openPath = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
-        for cell in openPath:
-            if cell.parent:
-                pygame.draw.line(
-                window, 
-                (0, 255, 0), 
-                (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
-                (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
-                3
-            )
+        current, openPath = aStarStep(current, end, openPath)
+        generateAStar(current, end)
     
-    
-        
-    
+    #openPath = graph.dijkstrasPath(start, end)
+
+    # if (len(walls) == 0):
+    #     openPath = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
+    #     for cell in openPath:
+    #         if cell.parent:
+    #             pygame.draw.line(
+    #             window, 
+    #             (0, 255, 0), 
+    #             (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+    #             (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+    #             3
+    #         )
+
+
+    # if len(stack) == 0:
+    #     openPath = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
+    #     for cell in openPath:
+    #         if cell.parent:
+    #             pygame.draw.line(
+    #             window, 
+    #             (0, 255, 0), 
+    #             (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+    #             (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+    #             3
+    #         )
+
+
 
     # for cell in finalPath[1:]:
     #     pygame.draw.line(window, 
@@ -421,6 +441,6 @@ while running:
     
     pygame.display.update()
     pygame.display.flip()
-    clock.tick(240)
+    clock.tick(60)
 
 pygame.quit()
