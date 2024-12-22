@@ -2,6 +2,7 @@ from __future__ import annotations
 import math
 import heapq
 import pygame
+from queue import Queue
 
 from Cell import Cell
 
@@ -93,7 +94,64 @@ class Graph:
 
         return path[::-1]
             
-                
+    def BFS_path(self, start: Cell, end: Cell):         
+        queue = Queue()  
+        current = start
+        queue.put(current)   
+        visited = set()
+        visited.add(current)
+
+        while queue:
+            current = queue.get()
+            if current == end:
+                break
+
+            for neighbor in self.neighbors(current):
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.put(neighbor)
+                    neighbor.parent = current
+                    
+        path = []
+        current = end
+        while current:
+            path.append(current)
+            current = current.parent
+
+        return path[::-1]
+    
+    def BFS_pathStep(self, start: Cell, end: Cell, queue: Queue, visited: set, window, cellSize: int ):        
+        
+        current = queue.get()
+        # print(queue)
+        # quit()
+        if (current != end):
+           
+            for neighbor in self.neighbors(current):
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.put(neighbor)
+                    neighbor.parent = current
+
+            # Draw the entire path up to this point
+            pathCell = current
+            while pathCell.parent:
+                x1, y1 = pathCell.x * cellSize + cellSize // 2, pathCell.y * cellSize + cellSize // 2
+                x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
+                pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
+                pathCell = pathCell.parent
+
+        if current == end: 
+            queue.ShutDown()
+
+                    
+        path = []
+        current = end
+        while current:
+            path.append(current)
+            current = current.parent
+
+        return path[::-1]
                         
         
     
