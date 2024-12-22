@@ -446,8 +446,9 @@ while running:
     #         (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
     #         3
     #         )
-
+    
     openPath = graph.BFS_pathStep(current, end, queue, visited, window, cellSize)
+    
     for cell in openPath:
         if cell.parent:
             pygame.draw.line(

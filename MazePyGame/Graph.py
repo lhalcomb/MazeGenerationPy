@@ -32,6 +32,17 @@ class Graph:
     
         return neighbors
     
+    def reconstruct_path(self, end: Cell):
+
+        path = []
+        current = end
+        while current:
+            path.append(current)
+            current = current.parent
+
+        return path[::-1]
+
+    
     def dijkstrasPath(self, start: Cell, end: Cell):
         self.initializeCosts()
         priority_queue = []
@@ -52,14 +63,7 @@ class Graph:
                     neighbor.parent = current
                     heapq.heappush(priority_queue, (neighbor.cost, neighbor))
 
-    
-        path = []
-        current = end
-        while current:
-            path.append(current)
-            current = current.parent
-
-        return path[::-1]  # Return reversed path (from start to end)
+        return self.reconstruct_path(end)
 
     def dijkstrasPathStep(self, current: Cell, end: Cell, priority_queue, cellSize: int, window):
         #this needs work, still going over. Doesn't stop when current == end. 
@@ -84,15 +88,8 @@ class Graph:
                 x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
                 pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
                 pathCell = pathCell.parent
-        
-        # Backtrack to find the path
-        path = []
-        current = end
-        while current:
-            path.append(current)
-            current = current.parent
 
-        return path[::-1]
+        return self.reconstruct_path(end)
             
     def BFS_path(self, start: Cell, end: Cell):         
         queue = Queue()  
@@ -111,24 +108,17 @@ class Graph:
                     visited.add(neighbor)
                     queue.put(neighbor)
                     neighbor.parent = current
-                    
-        path = []
-        current = end
-        while current:
-            path.append(current)
-            current = current.parent
 
-        return path[::-1]
+        return self.reconstruct_path(end)
     
-    def BFS_pathStep(self, start: Cell, end: Cell, queue: Queue, visited: set, window, cellSize: int ):        
+    def BFS_pathStep(self, start: Cell, end: Cell, queue: Queue, visited: set, window, cellSize: int ) -> list:        
         
         current = queue.get()
         # print(queue)
         # quit()
-        if (current != end):
-           
+        if queue:
             for neighbor in self.neighbors(current):
-                if neighbor not in visited:
+                if (neighbor not in visited) and (current != end):
                     visited.add(neighbor)
                     queue.put(neighbor)
                     neighbor.parent = current
@@ -136,22 +126,14 @@ class Graph:
             # Draw the entire path up to this point
             pathCell = current
             while pathCell.parent:
+
                 x1, y1 = pathCell.x * cellSize + cellSize // 2, pathCell.y * cellSize + cellSize // 2
                 x2, y2 = pathCell.parent.x * cellSize + cellSize // 2, pathCell.parent.y * cellSize + cellSize // 2
                 pygame.draw.line(window, (0, 255, 0), (x1, y1), (x2, y2), 3)
                 pathCell = pathCell.parent
 
-        if current == end: 
-            queue.ShutDown()
-
-                    
-        path = []
-        current = end
-        while current:
-            path.append(current)
-            current = current.parent
-
-        return path[::-1]
+        return self.reconstruct_path(end)
+      
                         
         
     
