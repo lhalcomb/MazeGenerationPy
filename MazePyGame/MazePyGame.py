@@ -448,16 +448,19 @@ while running:
     #         )
     
     openPath = graph.BFS_pathStep(current, end, queue, visited, window, cellSize)
-    
-    for cell in openPath:
-        if cell.parent:
-            pygame.draw.line(
-            window, 
-            (0, 255, 0), 
-            (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
-            (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
-            3
-            )
+    if current == end:
+        print("Path found")
+        break
+    if openPath:
+        for cell in openPath:
+            if cell.parent:
+                pygame.draw.line(
+                window, 
+                (0, 255, 0), 
+                (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+                (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+                3
+                )
 
 
     # for cell in finalPath[1:]:
