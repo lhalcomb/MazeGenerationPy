@@ -356,26 +356,26 @@ xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
 #DFS_Generate(stack)
-#iterativeRandomized_Kruskals(disjoint_set, walls)
+# iterativeRandomized_Kruskals(disjoint_set, walls)
 
 graph = Graph(grid)
 start = grid[0][0]
 end = grid[columnCellsCount - 1][rowCellsCount - 1] 
-# graph.initializeCosts()
-# priority_queue = []
-# heapq.heappush(priority_queue, (0, start))
-# start.cost = 0
+graph.initializeCosts()
+priority_queue = []
+heapq.heappush(priority_queue, (0, start))
+start.cost = 0
 openPath = []
 # current = start
 # start.heuristic = start.heuristicMan(end)
 # start.cost = 0
 # openPath.append(start)
 # finalPath = aStar(start, end)
-queue = Queue()  
-current = start
-queue.put(current)   
-visited = set()
-visited.add(current)
+# queue = Queue()  
+# current = start
+# queue.put(current)   
+# visited = set()
+# visited.add(current)
 
 while running:
     #for stepping through a*
@@ -391,10 +391,10 @@ while running:
 
 
     #DFS_step(stack)
-    DFS_Generate(stack)
+    #DFS_Generate(stack)
     #BFS_step()
     #iterativeRandomized_Kruskals(disjoint_set, walls)
-    # walls = iterativeRandomized_Kruskals_step(disjoint_set, walls)  
+    walls = iterativeRandomized_Kruskals_step(disjoint_set, walls)  
     for row in grid:
         for cell in row:
             renderCell(cell, cellSize)
@@ -409,19 +409,19 @@ while running:
     #     generateAStar(current, end)
 
     
-    #openPath = graph.dijkstrasPath(start, end)
+    # openPath = graph.dijkstrasPath(start, end)
 
-    # if (len(walls) == 0):
-    #     openPath = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
-    #     for cell in openPath:
-    #         if cell.parent:
-    #             pygame.draw.line(
-    #             window, 
-    #             (0, 255, 0), 
-    #             (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
-    #             (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
-    #             3
-    #         )
+    if (len(walls) == 0):
+        openPath = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
+        for cell in openPath:
+            if cell.parent:
+                pygame.draw.line(
+                window, 
+                (0, 255, 0), 
+                (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+                (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+                3
+            )
 
 
     # if len(stack) == 0:
@@ -447,20 +447,19 @@ while running:
     #         3
     #         )
     
-    openPath = graph.BFS_pathStep(current, end, queue, visited, window, cellSize)
-    if current == end:
-        print("Path found")
-        break
-    if openPath:
-        for cell in openPath:
-            if cell.parent:
-                pygame.draw.line(
-                window, 
-                (0, 255, 0), 
-                (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
-                (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
-                3
-                )
+    # openPath = graph.BFS_pathStep(current, end, queue, visited, window, cellSize)
+    # if current == end:
+    #     break
+    # if openPath:
+    #     for cell in openPath:
+    #         if cell.parent:
+    #             pygame.draw.line(
+    #             window, 
+    #             (0, 255, 0), 
+    #             (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+    #             (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+    #             3
+    #             )
 
 
     # for cell in finalPath[1:]:

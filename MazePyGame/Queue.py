@@ -19,7 +19,7 @@ class MyQueue:
     def print_queue(self) -> list:
 
         for item in self.queue:
-            print(item, end=", ")\
+            print(item, end=", ")
         
         print("\n")
         
