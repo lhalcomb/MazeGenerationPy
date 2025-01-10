@@ -341,7 +341,7 @@ def generateDijkstras(priority_queue, finalPath: list):
 generateGridofCells(columnCellsCount, rowCellsCount)
 stack = [grid[0][0]]
 
-#queue = Queue()
+# queue = Queue()
 current = grid[0][0]
 
 #queue.put(current)
@@ -356,23 +356,22 @@ xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
 #DFS_Generate(stack)
-# iterativeRandomized_Kruskals(disjoint_set, walls)
+#iterativeRandomized_Kruskals(disjoint_set, walls)
 
 graph = Graph(grid)
 start = grid[0][0]
 end = grid[columnCellsCount - 1][rowCellsCount - 1] 
-graph.initializeCosts()
-priority_queue = []
-heapq.heappush(priority_queue, (0, start))
-start.cost = 0
-openPath = []
-# current = start
-# start.heuristic = start.heuristicMan(end)
+# graph.initializeCosts()
+# priority_queue = []
+# heapq.heappush(priority_queue, (0, start))
 # start.cost = 0
-# openPath.append(start)
+openPath = []
+current = start
+start.heuristic = start.heuristicMan(end)
+start.cost = 0
+openPath.append(start)
 # finalPath = aStar(start, end)
-# queue = Queue()  
-# current = start
+# queue = Queue()
 # queue.put(current)   
 # visited = set()
 # visited.add(current)
@@ -390,18 +389,18 @@ while running:
     window.fill("gray")
 
 
-    #DFS_step(stack)
+    DFS_step(stack)
     #DFS_Generate(stack)
     #BFS_step()
     #iterativeRandomized_Kruskals(disjoint_set, walls)
-    walls = iterativeRandomized_Kruskals_step(disjoint_set, walls)  
+    #walls = iterativeRandomized_Kruskals_step(disjoint_set, walls)  
     for row in grid:
         for cell in row:
             renderCell(cell, cellSize)
     
-    # if (len(stack) == 0): 
-    #     current, openPath = aStarStep(current, end, openPath)
-    #     generateAStar(current, end)
+    if (len(stack) == 0): 
+        current, openPath = aStarStep(current, end, openPath)
+        generateAStar(current, end)
 
 
     # if (len(walls) == 0):
@@ -411,17 +410,17 @@ while running:
     
     # openPath = graph.dijkstrasPath(start, end)
 
-    if (len(walls) == 0):
-        openPath = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
-        for cell in openPath:
-            if cell.parent:
-                pygame.draw.line(
-                window, 
-                (0, 255, 0), 
-                (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
-                (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
-                3
-            )
+    # if (len(walls) == 0):
+    #     openPath = graph.dijkstrasPathStep(current, end, priority_queue, cellSize, window)
+    #     for cell in openPath:
+    #         if cell.parent:
+    #             pygame.draw.line(
+    #             window, 
+    #             (0, 255, 0), 
+    #             (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+    #             (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+    #             3
+    #         )
 
 
     # if len(stack) == 0:
@@ -446,20 +445,20 @@ while running:
     #         (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
     #         3
     #         )
-    
-    # openPath = graph.BFS_pathStep(current, end, queue, visited, window, cellSize)
-    # if current == end:
-    #     break
-    # if openPath:
-    #     for cell in openPath:
-    #         if cell.parent:
-    #             pygame.draw.line(
-    #             window, 
-    #             (0, 255, 0), 
-    #             (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
-    #             (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
-    #             3
-    #             )
+    # if (len(walls) == 0):
+    #     openPath = graph.BFS_pathStep(end, queue, visited, window, cellSize)
+    #     if current == end:
+    #         break
+    #     if openPath:
+    #         for cell in openPath:
+    #             if cell.parent:
+    #                 pygame.draw.line(
+    #                 window, 
+    #                 (0, 255, 0), 
+    #                 (cell.x * cellSize + cellSize // 2, cell.y * cellSize + cellSize // 2), 
+    #                 (cell.parent.x * cellSize + cellSize // 2, cell.parent.y * cellSize + cellSize // 2), 
+    #                 3
+    #                 )
 
 
     # for cell in finalPath[1:]:

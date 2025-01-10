@@ -111,7 +111,7 @@ class Graph:
 
         return self.reconstruct_path(end)
     
-    def BFS_pathStep(self, start: Cell, end: Cell, queue: Queue, visited: set, window, cellSize: int ) -> list:        
+    def BFS_pathStep(self, end: Cell, queue: Queue, visited: set, window, cellSize: int ) -> list:        
         if queue.empty():
             return self.reconstruct_path(end)
         
