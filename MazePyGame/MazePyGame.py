@@ -365,11 +365,11 @@ end = grid[columnCellsCount - 1][rowCellsCount - 1]
 # priority_queue = []
 # heapq.heappush(priority_queue, (0, start))
 # start.cost = 0
-# openPath = []
-# current = start
-# start.heuristic = start.heuristicMan(end)
-# start.cost = 0
-# openPath.append(start)
+openPath = []
+current = start
+start.heuristic = start.heuristicMan(end)
+start.cost = 0
+openPath.append(start)
 # finalPath = aStar(start, end)
 queue = Queue()
 queue.put(current)   
