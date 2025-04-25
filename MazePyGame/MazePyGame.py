@@ -1,11 +1,18 @@
-from queue import Queue
+
+import queue
 from Cell import Cell
 from DisJointSet import DisjointSet
 from Graph import Graph
+from QLearning import QLearning
 
+import math
 import pygame
 import random
 import heapq
+import matplotlib.pyplot as plt
+
+
+
 
 pygame.init()
 
@@ -22,9 +29,10 @@ grid = []
 burgundy = (128, 0, 32)
 black = (0, 0, 0)
 
-rowCellsCount = 30
-columnCellsCount = 30
-cellSize = 30
+rowCellsCount = int(math.sqrt(width))
+columnCellsCount = int(math.sqrt(height))
+cellSize = int(math.sqrt(width))
+
 
 def renderCell(cell: Cell, cellSize: int):
     xPos = cell.x * cellSize
@@ -114,11 +122,11 @@ def DFS_step(stack):
             next_cell.visited = True
 
 
-
     return stack
 
 
 def DFS_Generate(stack):
+    
     while len(stack):
         current = stack.pop()
         current.visited = True
@@ -147,6 +155,7 @@ def DFS_Generate(stack):
                 current.walls[0] = False
                 next_cell.walls[2] = False
             next_cell.visited = True
+    renderStartEnd()
 
 def BFS_step():
     
@@ -337,6 +346,13 @@ def generateDijkstras(priority_queue, finalPath: list):
      if len(priority_queue) == 0:
                 for (parentCell, currentCell) in finalPath:
                     pygame.draw.line(window, (0, 255, 0), (parentCell[0], parentCell[1]), (currentCell[0], currentCell[1]), 3)
+
+def renderStartEnd():
+    start = grid[0][0]
+    end = grid[columnCellsCount - 1][rowCellsCount - 1]
+
+    pygame.draw.rect(window, (255, 255, 0), (start.x * cellSize, start.y * cellSize, cellSize, cellSize))  # Start
+    pygame.draw.rect(window, (0, 255, 0), (end.x * cellSize, end.y * cellSize, cellSize, cellSize))  # Goal
         
 generateGridofCells(columnCellsCount, rowCellsCount)
 stack = [grid[0][0]]
@@ -351,33 +367,46 @@ walls = genListofWalls(columnCellsCount, rowCellsCount)
 disjoint_set = DisjointSet(columnCellsCount * rowCellsCount)
 
 
-
 xPos = current.x * cellSize
 yPos = current.y * cellSize 
 
-#DFS_Generate(stack)
+DFS_Generate(stack)
 #iterativeRandomized_Kruskals(disjoint_set, walls)
 
+
 graph = Graph(grid)
+
 start = grid[0][0]
-end = grid[columnCellsCount - 1][rowCellsCount - 1] 
+end = grid[columnCellsCount - 1][rowCellsCount - 1]
+
+
+
+
+
+"""# Dijkstra's algorithm initialization"""
 # graph.initializeCosts()
 # priority_queue = []
 # heapq.heappush(priority_queue, (0, start))
 # start.cost = 0
-openPath = []
-current = start
-start.heuristic = start.heuristicMan(end)
-start.cost = 0
-openPath.append(start)
+
+"""Astar stepping logic """
+# openPath = []
+# current = start
+# start.heuristic = start.heuristicMan(end)
+# start.cost = 0
+# openPath.append(start)
+
+
+"""Astar immediate solver"""
 # finalPath = aStar(start, end)
+
 # queue = Queue()
 # queue.put(current)   
 # visited = set()
 # visited.add(current)
 
+
 while running:
-    #for stepping through a*
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -390,6 +419,7 @@ while running:
                 stack = [grid[0][0]]
                 current = grid[0][0]
                 DFS_Generate(stack)
+            
 
             if event.key == pygame.K_1: #doesnt work 
                 openPath = []
@@ -404,7 +434,7 @@ while running:
     window.fill("gray")
 
 
-    DFS_step(stack)
+    #DFS_step(stack)
     #DFS_Generate(stack)
     #BFS_step()
     #iterativeRandomized_Kruskals(disjoint_set, walls)
@@ -413,9 +443,12 @@ while running:
         for cell in row:
             renderCell(cell, cellSize)
     
-    if (len(stack) == 0): 
-        current, openPath = aStarStep(current, end, openPath)
-        generateAStar(current, end)
+ 
+
+    
+    # if (len(stack) == 0): 
+    #     current, openPath = aStarStep(current, end, openPath)
+    #     generateAStar(current, end)
 
 
     # if (len(walls) == 0):

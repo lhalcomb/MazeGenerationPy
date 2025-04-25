@@ -27,4 +27,24 @@ class Cell:
     def heuristicEuclidean(self,  end: Cell):
         #heuristic function for euclidean  distance
         return math.sqrt((self.x - end.x)**2 + (self.y - end.y)**2)
+    
+
+if __name__ == "__main__":
+    # Example usage
+    import QLearning
+    grid = []
+    for x in range(5):
+        row = []
+        for y in range(5):
+            row.append(Cell(x, y))
+        grid.append(row)
+    for row in grid:
+        for cell in row:
+            print(f"Cell ({cell.x}, {cell.y}) ")
+    
+    ql = QLearning.QLearning(grid, grid[0][0], grid[4][4])
+    ql.train(500)
+    print(ql.get_valid_actions(grid[0][0]))
+
+   
 
