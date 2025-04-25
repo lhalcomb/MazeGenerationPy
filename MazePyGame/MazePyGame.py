@@ -3,13 +3,11 @@ import queue
 from Cell import Cell
 from DisJointSet import DisjointSet
 from Graph import Graph
-from QLearning import QLearning
 
 import math
 import pygame
 import random
 import heapq
-import matplotlib.pyplot as plt
 
 
 
